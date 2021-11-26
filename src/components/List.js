@@ -4,17 +4,21 @@ import PropTypes from "prop-types";
 const List = (props) => {
     const {onDetails} = props;
     const [users, setUsers] = useState([]);
+    const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
         fetch('https://raw.githubusercontent.com/netology-code/ra16-homeworks/master/hooks-context/use-effect/data/users.json')
             .then(response => response.json())
-            .then(data => setUsers(data))
+            .then((data) => {
+                setUsers(data);
+                setLoading(false)
+            })
             .catch(err => console.log(err))
     }, []);
 
     return (
         <div className="List">
-            {users.map(user => <div key={user.id} className="Person" id={user.id} onClick={() => onDetails(user)}>{user.name}</div>)}
+           {isLoading ? <div>Loading...</div> : users.map(user => <div key={user.id} className="Person" id={user.id} onClick={() => onDetails(user)}>{user.name}</div>)}
         </div>
     );
 };
